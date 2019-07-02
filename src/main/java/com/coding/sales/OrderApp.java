@@ -3,7 +3,9 @@ package com.coding.sales;
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.manager.PreciousMetalStore;
+import com.coding.sales.model.DiscountManager;
 import com.coding.sales.model.PreciousMetal;
+import com.coding.sales.output.DiscountItemRepresentation;
 import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
 
@@ -19,6 +21,12 @@ import java.util.Map;
 public class OrderApp {
 
     private PreciousMetalStore mPreciousMetalStore;
+    private Map<String, PreciousMetal> mPreciousMetalMap;
+
+    public OrderApp() {
+        mPreciousMetalStore = PreciousMetalStore.getInstance();
+        mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
+    }
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -42,25 +50,12 @@ public class OrderApp {
     }
 
     OrderRepresentation checkout(OrderCommand command) {
-        OrderRepresentation result = null;
-        mPreciousMetalStore = PreciousMetalStore.getInstance();
-//<<<<<<<Updated upstream
-//        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
-//        OrderRepresentation orderRepresentation = new OrderRepresentation();
-//        //TODO 获取商品列表
-//        List<OrderItemCommand> orderItemList = command.getItems();
-//        computePrice(orderRepresentation, preciousMetalList, orderItemList);
-
-//=======
-        Map<String, PreciousMetal> mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
-        OrderRepresentation orderRepresentation = new OrderRepresentation();
-        //TODO 获取商品列表
+        OrderRepresentation result = new OrderRepresentation();
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
-        computePrice(orderRepresentation, mPreciousMetalMap, orderItemList);
-        computeDisCountedPrice(orderRepresentation, orderItemList, mPreciousMetalMap, discounts);
-//>>>>>>>Stashed changes
-
+        computePrice(result, orderItemList);
+        computeDisCountedPrice(result, orderItemList, discounts);
+//        computePromotions(result, orderItemList);
         return result;
     }
 
@@ -69,43 +64,55 @@ public class OrderApp {
      *
      * @param orderRepresentation
      * @param orderItemList
-     * @param mPreciousMetalMap
      * @param discounts
      * @return
      */
-    private float computeDisCountedPrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList, Map<String, PreciousMetal> mPreciousMetalMap, List<String> discounts) {
-        if (orderRepresentation == null || orderItemList.size() <= 0 || discounts.size() <= 0) {
-            return 0.00f;
+    public void computeDisCountedPrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList, List<String> discounts) {
+        if (orderRepresentation == null || orderItemList.size() <= 0 || null == discounts || discounts.size() <= 0) {
+            return;
         }
-        //遍历会员购买清单
-        for (OrderItemCommand orderItem : orderItemList) {
-            //从在售清单获取商品信息
-            PreciousMetal preciousMetal = mPreciousMetalMap.get(orderItem.getProduct());
-            if (null == preciousMetal) {
-                continue;
-            }
-            //获取商品可使用的打折卡
-            List<String> discountCoupons = preciousMetal.getDiscountCoupons();
-            //遍历用户上送的打折卡类型
-            for (String discount : discounts) {
-                //该商品是否支持用户手中的打折卡
-                if (discountCoupons.contains(discount)){
-                    
+        BigDecimal totalDiscount = new BigDecimal(0);
+        //遍历打折卡
+        List<DiscountItemRepresentation> discountItemRepresentations = new ArrayList<DiscountItemRepresentation>();
+        for (String discount : discounts) {
+            //遍历会员购买清单
+            System.out.println("orderItems.size:" + orderRepresentation.getOrderItems().size());
+            for (OrderItemRepresentation orderItem : orderRepresentation.getOrderItems()) {
+                PreciousMetal preciousMetal = pickProductById(mPreciousMetalMap, orderItem.getProductNo());
+                if (null == preciousMetal) {
+                    continue;
                 }
-                //计算该商品打折后的金额
-
-
+                //获取商品可使用的打折卡
+                List<String> discountCoupons = preciousMetal.getDiscountCoupons();
+                if (null == discountCoupons || !discountCoupons.contains(discount)) {
+                    continue;
+                }
+                System.out.println("discountCoupons.size:" + orderRepresentation.getOrderItems().size());
+                //遍历用户上送的打折卡类型
+                for (String usableDiscount : discounts) {
+                    System.out.println("usableDiscount:" + usableDiscount);
+                    if (usableDiscount.equals(discount)) {
+                        float discountRate = DiscountManager.getDiscountRate(discount);
+                        System.out.println("subtotal:" + orderItem.getSubTotal()+"; rate:"+discountRate);
+                        BigDecimal subDiscount = orderItem.getSubTotal().multiply(new BigDecimal(discountRate));
+                        DiscountItemRepresentation discountItem = new DiscountItemRepresentation(orderItem.getProductNo(), orderItem.getProductName(), subDiscount);
+                        discountItemRepresentations.add(discountItem);
+                        totalDiscount = totalDiscount.add(subDiscount);
+                    }
+                }
             }
         }
-        return 0;
+        orderRepresentation.setDiscounts(discountItemRepresentations);
+        orderRepresentation.setTotalDiscountPrice(totalDiscount);
     }
+
 
     /**
      * TODO 计算商品价格
      *
      * @param orderItemList
      */
-    public void computePrice(OrderRepresentation orderRepresentation, Map<String,PreciousMetal> preciousMetalMap, List<OrderItemCommand> orderItemList) {
+    public void computePrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList) {
         if (null == orderItemList || orderItemList.size() <= 0) {
             return;
         }
@@ -115,7 +122,7 @@ public class OrderApp {
             if (null == orderItem) {
                 continue;
             }
-            PreciousMetal preciousMetal = pickProductById(preciousMetalMap, orderItem.getProduct());
+            PreciousMetal preciousMetal = pickProductById(mPreciousMetalMap, orderItem.getProduct());
             if (null == preciousMetal) {
                 continue;
             }
@@ -129,7 +136,7 @@ public class OrderApp {
         orderRepresentation.setTotalPrice(totalPrice);
     }
 
-    private PreciousMetal pickProductById( Map<String,PreciousMetal> preciousMetalMap, String productId) {
+    private PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
         }
