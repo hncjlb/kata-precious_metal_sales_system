@@ -7,17 +7,14 @@ import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PromotionManager {
-    private static final String type1 = "每满3000元减350";
-    private static final String type2 = "每满2000元减30";
-    private static final String type3 = "每满1000元减10";
-    private static final String type4 = "第3件半价";
-    private static final String type5 = "满3送1";
+    public static final String type1 = "每满3000元减350";
+    public static final String type2 = "每满2000元减30";
+    public static final String type3 = "每满1000元减10";
+    public static final String type4 = "第3件半价";
+    public static final String type5 = "满3送1";
 
 
     private static Map<String, PreciousMetal> sPreciousMetalMap;
@@ -40,11 +37,12 @@ public class PromotionManager {
                 return;
             }
             List<String> promotions = preciousMetal.getPromotions();
+            System.out.println(promotions.size());
             Map<String,Float> promotionResult = computeMaxPromotion(promotions, orderItem);
-            float maxPromotion = promotionResult.get(0);
-            System.out.println("maxPromotion:"+maxPromotion);
-            compareAndDiscount(result, orderItem, maxPromotion);
             for(String key : promotionResult.keySet()) {
+                float maxPromotion = promotionResult.get(key);
+                System.out.println("maxPromotion:"+maxPromotion);
+                compareAndDiscount(result, orderItem, maxPromotion);
                 if(!result.getDiscountCards().contains(key)) {
                     result.getDiscountCards().add(key);
                 }
@@ -57,6 +55,7 @@ public class PromotionManager {
         if (null != result.getDiscounts() && result.getDiscounts().size() > 0) {
             List<DiscountItemRepresentation> discounts = result.getDiscounts();
             for (DiscountItemRepresentation discount : discounts) {
+                System.out.println("discount:"+discount.getProductName()+"; "+discount.getDiscount());
                 if (discount.getProductNo().equals(orderItem.getProductNo()) && maxPromotion > discount.getDiscount().floatValue()) {
                     discount.setDiscount(new BigDecimal(maxPromotion));
                     hasAdd = true;
@@ -99,6 +98,7 @@ public class PromotionManager {
         }
         Map<String,Float>  result = new HashMap<String, Float>();
         result.put(maxPromotionStr,maxPromotion);
+        System.out.println("str:"+maxPromotionStr+"; va:"+maxPromotion);
         return result;
     }
 }

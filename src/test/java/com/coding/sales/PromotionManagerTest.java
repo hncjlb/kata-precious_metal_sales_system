@@ -32,18 +32,21 @@ public class PromotionManagerTest {
     }
 
     @Test
-    public void should_discount_is_490_when_buy_3_product_003002_has_promotion_type1() {
+    public void should_discount_is_350_when_buy_5_product_002003() {
         OrderApp app = new OrderApp();
         OrderRepresentation orderRepresentation = new OrderRepresentation();
         List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
-        OrderItemCommand orderItemCommand = new OrderItemCommand("003002", new BigDecimal(3));
+        OrderItemCommand orderItemCommand = new OrderItemCommand("002003", new BigDecimal(5));
         orderItemCommandList.add(orderItemCommand);
         app.computePrice(orderRepresentation, orderItemCommandList);
-//        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
+        List<String> discounts = new ArrayList<String>();
+        discounts.add(DiscountManager.DISCOUNT_9);
+        app.computePrice(orderRepresentation, orderItemCommandList);
+        DiscountManager.computeDiscountedPrice(orderRepresentation, orderItemCommandList, discounts);
 
         PromotionManager.computePromotions(orderRepresentation);
         app.computeTotalDiscount(orderRepresentation);
 
-        assertEquals(new BigDecimal(490), orderRepresentation.getTotalDiscountPrice());
+        assertEquals(new BigDecimal(350), orderRepresentation.getTotalDiscountPrice());
     }
 }
