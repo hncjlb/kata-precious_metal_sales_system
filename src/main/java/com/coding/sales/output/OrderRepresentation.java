@@ -149,7 +149,7 @@ public class OrderRepresentation {
     private String getDiscount() {
         StringBuilder result = new StringBuilder("\n优惠清单：\n");
         for (DiscountItemRepresentation discount : discounts) {
-            result.append(String.format(" (%s)%s: -%s\n",
+            result.append(String.format("(%s)%s: -%s\n",
                     discount.getProductNo(),
                     discount.getProductName(),
                     MONEY_FORMAT.format(discount.getDiscount())));
@@ -175,7 +175,7 @@ public class OrderRepresentation {
         return result.toString();
     }
 
-    private String getMemberChangeInfo() {
+    public String getMemberChangeInfo() {
         StringBuilder result = new StringBuilder();
         if (memberNo == null || memberNo.length() <= 0) {
             return "";

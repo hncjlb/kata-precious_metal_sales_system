@@ -2,6 +2,7 @@ package com.coding.sales;
 
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.manager.DiscountManager;
+import com.coding.sales.model.Member;
 import com.coding.sales.output.OrderRepresentation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -93,5 +94,12 @@ public class OrderAppTest {
         app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
 
         assertEquals(new BigDecimal(1242.00), orderRepresentation.getTotalDiscountPrice());
+    }
+
+    @Test
+    public void when_input_member_name_mading_output_result_mading() {
+        OrderApp app = new OrderApp();
+        OrderRepresentation orderRepresentation = new OrderRepresentation();
+        Member member = new Member("马丁", "普卡", "6236609999", "9860");
     }
 }

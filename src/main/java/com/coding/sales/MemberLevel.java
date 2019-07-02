@@ -17,6 +17,7 @@ public class MemberLevel {
     public void computeMemberLevel(OrderRepresentation orderRepresentation, int historyIntegral, int cumulativeIntegral) {
         String oldLevel = getMemberLevelFromIntegral(historyIntegral);
         String newLevel = getMemberLevelFromIntegral(cumulativeIntegral);
+        orderRepresentation.setOldMemberType(oldLevel);
         if (!oldLevel.equals(newLevel)) {
             orderRepresentation.setNewMemberType(newLevel);
         }
@@ -28,7 +29,7 @@ public class MemberLevel {
      * @param integral
      * @return
      */
-    private String getMemberLevelFromIntegral(int integral) {
+    public String getMemberLevelFromIntegral(int integral) {
         if (integral < 10000) {
             return "普卡";
         } else if (integral < 50000) {

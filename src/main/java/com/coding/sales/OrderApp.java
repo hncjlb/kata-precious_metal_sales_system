@@ -61,8 +61,8 @@ public class OrderApp {
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
 
-        getOrderMemberMsg(mMemberMap, command.getMemberId());
-
+        Member member = getOrderMemberMsg(mMemberMap, command.getMemberId());
+        initCurrentOrderMemberMsg(result, member, command);
         computePrice(result, orderItemList);
         computeDisCountedPrice(result, orderItemList, discounts);
 
