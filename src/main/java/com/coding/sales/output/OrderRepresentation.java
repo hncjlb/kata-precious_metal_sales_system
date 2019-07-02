@@ -250,6 +250,10 @@ public class OrderRepresentation {
         this.discountCards = discountCards;
     }
 
+    public BigDecimal getReceivables(){
+        return receivables;
+    }
+
     public BigDecimal getTotalPrice(){
         return totalPrice;
     }
@@ -264,5 +268,9 @@ public class OrderRepresentation {
 
     public BigDecimal getTotalDiscountPrice() {
         return totalDiscountPrice;
+    }
+
+    public int getMemberPoints() {
+        return memberPoints;
     }
 }

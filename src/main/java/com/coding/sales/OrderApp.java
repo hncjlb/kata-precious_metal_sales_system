@@ -70,6 +70,8 @@ public class OrderApp {
 
         computeTotalDiscount(result);
         computeDeal(result);
+        computeMemberIntegral(result, member);
+        computeMemberLevel(result, member);
         return result;
     }
 
@@ -144,6 +146,26 @@ public class OrderApp {
         }
         orderRepresentation.setItems(orderItemRepresentations);
         orderRepresentation.setTotalPrice(totalPrice);
+    }
+
+    /**
+     * 计算用户积分
+     */
+    private void computeMemberIntegral(OrderRepresentation orderRepresentation, Member member) {
+        MemberIntegral memberIntegral = new MemberIntegral();
+        memberIntegral.computeMemberIntegral(orderRepresentation, member, orderRepresentation.getReceivables());
+    }
+
+    /**
+     * 计算用户等级
+     *
+     * @param orderRepresentation
+     * @param member
+     */
+    private void computeMemberLevel(OrderRepresentation orderRepresentation, Member member) {
+        MemberLevel memberLevel = new MemberLevel();
+        memberLevel.computeMemberLevel(orderRepresentation, Integer.valueOf(member.getIntegral()),
+                orderRepresentation.getMemberPoints());
     }
 
     private PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {

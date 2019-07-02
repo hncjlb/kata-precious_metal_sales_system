@@ -4,8 +4,8 @@ import com.coding.sales.model.Member;
 import com.coding.sales.output.OrderRepresentation;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+
+import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +41,7 @@ public class MemberIntegralTest {
 
     @Test
     public void when_input_user_level_puka_pay_money_9860_output_increase_integral_9860() {
-        int orderIncreaseIntegral = memberIntegral.getOrderIncreaseIntegral(member, "9860.00");
+        int orderIncreaseIntegral = memberIntegral.getOrderIncreaseIntegral(member, new BigDecimal("9860.00"));
         assertEquals(9860, orderIncreaseIntegral);
     }
 
@@ -49,7 +49,7 @@ public class MemberIntegralTest {
     public void when_input_user_level_puka_integral_9860_pay_money_9860point00_output_shenji() {
         OrderRepresentation orderRepresentation = new OrderRepresentation();
         orderRepresentation.setMemberNo("123456");
-        memberIntegral.computeMemberIntegral(orderRepresentation, member, "9860.00");
+        memberIntegral.computeMemberIntegral(orderRepresentation, member, new BigDecimal("9860.00"));
         assertTrue("", orderRepresentation.getMemberChangeInfo().contains("金卡客户"));
     }
 

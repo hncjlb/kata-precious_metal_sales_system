@@ -16,10 +16,10 @@ public class MemberIntegral {
      *
      * @param orderRepresentation
      * @param member
-     * @param orderPayMoney
+     * @param receivables
      */
-    public void computeMemberIntegral(OrderRepresentation orderRepresentation, Member member, String orderPayMoney) {
-        int increaseIntegral = getOrderIncreaseIntegral(member, orderPayMoney);
+    public void computeMemberIntegral(OrderRepresentation orderRepresentation, Member member, BigDecimal receivables) {
+        int increaseIntegral = getOrderIncreaseIntegral(member, receivables);
         int cumulativeIntegral = getOrderCumulativeIntegral(member, increaseIntegral);
         orderRepresentation.setMemberPointsIncreased(increaseIntegral);
         orderRepresentation.setMemberPoints(cumulativeIntegral);
@@ -45,14 +45,13 @@ public class MemberIntegral {
      * 支付金额 * 会员等级积分准则
      *
      * @param member
-     * @param orderPayMoney
+     * @param receivables
      * @return
      */
-    public int getOrderIncreaseIntegral(Member member, String orderPayMoney) {
+    public int getOrderIncreaseIntegral(Member member, BigDecimal receivables) {
         String memberIntegralBenchmark = getMemberIntegralBenchmark(member);
-        BigDecimal payMoneyBig = new BigDecimal(orderPayMoney);
         BigDecimal benchmarkBig = new BigDecimal(memberIntegralBenchmark);
-        BigDecimal increaseIntegralBig = payMoneyBig.multiply(benchmarkBig);
+        BigDecimal increaseIntegralBig = receivables.multiply(benchmarkBig);
         return increaseIntegralBig.setScale(0, BigDecimal.ROUND_DOWN).intValue();
     }
 
