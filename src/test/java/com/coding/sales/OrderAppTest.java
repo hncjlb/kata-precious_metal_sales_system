@@ -1,8 +1,6 @@
 package com.coding.sales;
 
 import com.coding.sales.input.OrderItemCommand;
-import com.coding.sales.manager.DiscountManager;
-import com.coding.sales.model.Member;
 import com.coding.sales.output.OrderRepresentation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 @RunWith(Parameterized.class)
 public class OrderAppTest {

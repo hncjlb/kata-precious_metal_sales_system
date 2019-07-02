@@ -11,7 +11,7 @@ import java.util.List;
 
 public class OrderRepresentationTest {
 
-    private Date createTime = new Date();
+    private String createTime = "2019-07-02 15:00:00";
     private String orderId = "000001";
     private String memberNo = "6236609999";
     private String memberName = "马丁";
@@ -64,7 +64,7 @@ public class OrderRepresentationTest {
         return String.format("方鼎银行贵金属购买凭证\n\n" +
                         "销售单号：%s 日期：%s\n" +
                         "客户卡号：%s 会员姓名：%s 客户等级：%s 累计积分：%d\n",
-                orderId, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createTime),
+                orderId, createTime,
                 memberNo, memberName, newMemberType, memberPoints);
     }
 

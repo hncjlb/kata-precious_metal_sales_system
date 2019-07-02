@@ -119,7 +119,7 @@ public class OrderApp {
         }
         orderRepresentation.setMemberNo(member.getCardNo());
         orderRepresentation.setOrderId(command.getOrderId());
-        orderRepresentation.setCreateTime(new Date(command.getCreateTime()));
+        orderRepresentation.setCreateTime(command.getCreateTime());
         orderRepresentation.setMemberName(member.getName());
     }
 

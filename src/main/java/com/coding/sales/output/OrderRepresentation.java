@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class OrderRepresentation {
     private String orderId;
-    private Date createTime;
+    private String createTime;
     private String memberNo;
     private String memberName;
     private String oldMemberType;
@@ -49,7 +49,7 @@ public class OrderRepresentation {
      * @param payments              付款记录
      * @param discountCards         付款使用的打折券
      */
-    public OrderRepresentation(String orderId, Date createTime,
+    public OrderRepresentation(String orderId, String createTime,
                                String memberNo, String memberName, String oldMemberType, String newMemberType, int memberPointsIncreased, int memberPoints,
                                List<OrderItemRepresentation> orderItems,
                                BigDecimal totalPrice, List<DiscountItemRepresentation> discounts, BigDecimal totalDiscountPrice,
@@ -126,9 +126,8 @@ public class OrderRepresentation {
                 "客户卡号：%s 会员姓名：%s 客户等级：%s 累计积分：%d\n" +
                 "\n" +
                 "商品及数量           单价         金额\n";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return String.format(reportTitle, orderId, dateFormat.format(createTime), memberNo, memberName, newMemberType, memberPoints);
+        return String.format(reportTitle, orderId, createTime, memberNo, memberName, newMemberType, memberPoints);
     }
 
     private String getOrderDetail() {
@@ -194,7 +193,7 @@ public class OrderRepresentation {
         this.orderId = orderId;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
