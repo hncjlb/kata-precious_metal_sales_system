@@ -3,10 +3,7 @@ package com.coding.sales.output;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -28,7 +25,6 @@ public class OrderRepresentation {
     private BigDecimal receivables;
     private List<PaymentRepresentation> payments;
     private List<String> discountCards;
-    private Map<String, List<String>> discountProducts;
 
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("0.00");
 
@@ -274,14 +270,6 @@ public class OrderRepresentation {
 
     public int getMemberPoints() {
         return memberPoints;
-    }
-
-    public Map<String, List<String>> getDiscountProducts() {
-        return discountProducts;
-    }
-
-    public void setDiscountProducts(Map<String, List<String>> discountProducts) {
-        this.discountProducts = discountProducts;
     }
 
     public List<String> getDiscountCards() {

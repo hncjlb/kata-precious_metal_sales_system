@@ -70,8 +70,9 @@ public class DiscountManager {
                         if (!hasAdd) {
                             discountItemRepresentations.add(discountItem);
                         }
-
-                        usedDiscountCards.add(usableDiscount);
+                        if (!usedDiscountCards.contains(usableDiscount)) {
+                            usedDiscountCards.add(usableDiscount);
+                        }
                     }
                 }
             }
