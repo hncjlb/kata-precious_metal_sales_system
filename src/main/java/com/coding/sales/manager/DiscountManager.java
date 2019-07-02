@@ -19,11 +19,11 @@ public class DiscountManager {
 
     public static float getDiscountRate(String discount) {
         if (DiscountManager.DISCOUNT_9.equals(discount)) {
-            return 0.9f;
+            return 0.1f;
         } else if (DiscountManager.DISCOUNT_95.equals(discount)) {
-            return 0.95f;
+            return 0.05f;
         } else {
-            return 1f;
+            return 0f;
         }
     }
 
@@ -59,7 +59,7 @@ public class DiscountManager {
                 }
                 System.out.println("discountCoupons.size:" + orderRepresentation.getOrderItems().size());
                 //遍历用户上送的打折卡类型
-                for (String usableDiscount : discounts) {
+                for (String usableDiscount : discountCoupons) {
                     System.out.println("usableDiscount:" + usableDiscount);
                     if (usableDiscount.equals(discount)) {
                         float discountRate = DiscountManager.getDiscountRate(discount);

@@ -2,6 +2,7 @@ package com.coding.sales;
 
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
+import com.coding.sales.input.PaymentCommand;
 import com.coding.sales.manager.MemberMsg;
 import com.coding.sales.manager.PreciousMetalStore;
 import com.coding.sales.manager.DiscountManager;
@@ -11,6 +12,7 @@ import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.DiscountItemRepresentation;
 import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
+import com.coding.sales.output.PaymentRepresentation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -121,6 +123,22 @@ public class OrderApp {
         orderRepresentation.setOrderId(command.getOrderId());
         orderRepresentation.setCreateTime(command.getCreateTime());
         orderRepresentation.setMemberName(member.getName());
+        orderRepresentation.setPayments(getPayments(command));
+    }
+
+    /**
+     * 设置付款记录
+     * @param command
+     * @return
+     */
+    public List<PaymentRepresentation> getPayments(OrderCommand command){
+        List<PaymentRepresentation> paymentRepresentations= new ArrayList<PaymentRepresentation>();
+        List<PaymentCommand> payments = command.getPayments();
+        for (PaymentCommand paymentCommand:payments){
+            PaymentRepresentation paymentRepresentation = new PaymentRepresentation(paymentCommand.getType(),paymentCommand.getAmount());
+            paymentRepresentations.add(paymentRepresentation);
+        }
+        return paymentRepresentations;
     }
 
     /**
