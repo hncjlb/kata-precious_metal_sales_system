@@ -64,42 +64,4 @@ public class OrderAppTest {
         assertEquals(new BigDecimal(998.00), orderRepresentation.getTotalPrice());
     }
 
-    @Test
-    public void should_discount_is_null_when_buy_one_product_001001_has_discount_9() {
-        OrderApp app = new OrderApp();
-        OrderRepresentation orderRepresentation = new OrderRepresentation();
-        List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
-        OrderItemCommand orderItemCommand = new OrderItemCommand("001001", new BigDecimal(1));
-        orderItemCommandList.add(orderItemCommand);
-        List<String> discounts = new ArrayList<String>();
-        discounts.add(DiscountManager.DISCOUNT_9);
-        app.computePrice(orderRepresentation, orderItemCommandList);
-
-        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
-
-        assertNull(orderRepresentation.getDiscounts());
-    }
-
-    @Test
-    public void should_discount_is_1242_when_buy_one_product_001002_has_discount_9() {
-        OrderApp app = new OrderApp();
-        OrderRepresentation orderRepresentation = new OrderRepresentation();
-        List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
-        OrderItemCommand orderItemCommand = new OrderItemCommand("001002", new BigDecimal(1));
-        orderItemCommandList.add(orderItemCommand);
-        List<String> discounts = new ArrayList<String>();
-        discounts.add(DiscountManager.DISCOUNT_9);
-        app.computePrice(orderRepresentation, orderItemCommandList);
-
-        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
-
-        assertEquals(new BigDecimal(1242.00), orderRepresentation.getTotalDiscountPrice());
-    }
-
-    @Test
-    public void when_input_member_name_mading_output_result_mading() {
-        OrderApp app = new OrderApp();
-        OrderRepresentation orderRepresentation = new OrderRepresentation();
-        Member member = new Member("马丁", "普卡", "6236609999", "9860");
-    }
 }
