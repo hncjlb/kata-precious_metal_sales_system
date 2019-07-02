@@ -25,9 +25,9 @@ public class DiscountManagerTest {
         discounts.add(DiscountManager.DISCOUNT_9);
         app.computePrice(orderRepresentation, orderItemCommandList);
 
-        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
+        DiscountManager.computeDiscountedPrice(orderRepresentation, orderItemCommandList, discounts);
 
-        assertNull(orderRepresentation.getDiscounts());
+        assertEquals(new BigDecimal(0), orderRepresentation.getTotalDiscountPrice());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class DiscountManagerTest {
         discounts.add(DiscountManager.DISCOUNT_9);
         app.computePrice(orderRepresentation, orderItemCommandList);
 
-        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
+        DiscountManager.computeDiscountedPrice(orderRepresentation, orderItemCommandList, discounts);
 
         assertEquals(new BigDecimal(1242.00), orderRepresentation.getTotalDiscountPrice());
     }

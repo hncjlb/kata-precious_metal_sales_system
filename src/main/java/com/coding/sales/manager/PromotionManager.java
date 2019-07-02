@@ -41,7 +41,6 @@ public class PromotionManager {
     private static void compareAndDiscount(OrderRepresentation result, OrderItemRepresentation orderItem, float maxPromotion) {
         boolean hasAdd = false;
         if (null != result.getDiscounts() && result.getDiscounts().size() > 0) {
-            System.out.println("11111111111111111");
             List<DiscountItemRepresentation> discounts = result.getDiscounts();
             for (DiscountItemRepresentation discount : discounts) {
                 if (discount.getProductNo().equals(orderItem.getProductNo()) && maxPromotion > discount.getDiscount().floatValue()) {

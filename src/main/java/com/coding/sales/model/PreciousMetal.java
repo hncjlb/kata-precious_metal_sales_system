@@ -3,6 +3,7 @@ package com.coding.sales.model;
 import com.coding.sales.output.OrderItemRepresentation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 贵金属商品
@@ -82,4 +83,10 @@ public class PreciousMetal {
         this.promotions = promotions;
     }
 
+    public static PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {
+        if (null == productId || productId.isEmpty()) {
+            return null;
+        }
+        return preciousMetalMap.get(productId);
+    }
 }

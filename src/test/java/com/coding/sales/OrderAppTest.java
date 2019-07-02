@@ -63,5 +63,4 @@ public class OrderAppTest {
 
         assertEquals(new BigDecimal(998.00), orderRepresentation.getTotalPrice());
     }
-
 }

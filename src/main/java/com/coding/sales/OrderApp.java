@@ -64,12 +64,17 @@ public class OrderApp {
         Member member = getOrderMemberMsg(mMemberMap, command.getMemberId());
         initCurrentOrderMemberMsg(result, member, command);
         computePrice(result, orderItemList);
-        computeDisCountedPrice(result, orderItemList, discounts);
+        DiscountManager.computeDiscountedPrice(result, orderItemList, discounts);
 
         PromotionManager.computePromotions(result);
 
         computeTotalDiscount(result);
+        computeDeal(result);
         return result;
+    }
+
+    private void computeDeal(OrderRepresentation result) {
+        result.setReceivables(result.getTotalPrice().subtract(result.getTotalDiscountPrice()));
     }
 
     public void computeTotalDiscount(OrderRepresentation order) {
@@ -111,70 +116,6 @@ public class OrderApp {
         orderRepresentation.setCreateTime(new Date(command.getCreateTime()));
         orderRepresentation.setMemberName(member.getName());
     }
-
-    /**
-     * 计算商品折扣
-     *
-     * @param orderRepresentation
-     * @param orderItemList
-     * @param discounts
-     * @return
-     */
-    public void computeDisCountedPrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList, List<String> discounts) {
-        if (orderRepresentation == null || orderItemList.size() <= 0 || null == discounts || discounts.size() <= 0) {
-            return;
-        }
-        BigDecimal totalDiscount = new BigDecimal(0);
-        //遍历打折卡
-        List<DiscountItemRepresentation> discountItemRepresentations = new ArrayList<DiscountItemRepresentation>();
-        for (String discount : discounts) {
-            //遍历会员购买清单
-            System.out.println("orderItems.size:" + orderRepresentation.getOrderItems().size());
-            for (OrderItemRepresentation orderItem : orderRepresentation.getOrderItems()) {
-                PreciousMetal preciousMetal = pickProductById(mPreciousMetalMap, orderItem.getProductNo());
-                if (null == preciousMetal) {
-                    continue;
-                }
-                //获取商品可使用的打折卡
-                List<String> discountCoupons = preciousMetal.getDiscountCoupons();
-                if (null == discountCoupons || !discountCoupons.contains(discount)) {
-                    continue;
-                }
-                System.out.println("discountCoupons.size:" + orderRepresentation.getOrderItems().size());
-                //遍历用户上送的打折卡类型
-                for (String usableDiscount : discounts) {
-                    System.out.println("usableDiscount:" + usableDiscount);
-                    if (usableDiscount.equals(discount)) {
-                        float discountRate = DiscountManager.getDiscountRate(discount);
-                        System.out.println("subtotal:" + orderItem.getSubTotal() + "; rate:" + discountRate);
-                        BigDecimal subDiscount = orderItem.getSubTotal().multiply(new BigDecimal(discountRate));
-                        DiscountItemRepresentation discountItem = new DiscountItemRepresentation(orderItem.getProductNo(), orderItem.getProductName(), subDiscount);
-                        boolean hasAdd = compareExistDiscount(discountItemRepresentations, discountItem);
-                        if (!hasAdd) {
-                            discountItemRepresentations.add(discountItem);
-                        }
-
-                        totalDiscount = totalDiscount.add(subDiscount);
-                    }
-                }
-            }
-        }
-        orderRepresentation.setDiscounts(discountItemRepresentations);
-        orderRepresentation.setTotalDiscountPrice(totalDiscount);
-    }
-
-    private boolean compareExistDiscount(List<DiscountItemRepresentation> discountItemRepresentations, DiscountItemRepresentation discountItem) {
-        boolean hasAdd = false;
-        for (DiscountItemRepresentation existDiscount : discountItemRepresentations) {
-            if (existDiscount.getProductNo().equals(discountItem.getProductNo()) && existDiscount.getDiscount().floatValue() < discountItem.getDiscount().floatValue()) {
-                existDiscount.setDiscount(discountItem.getDiscount());
-                hasAdd = true;
-                break;
-            }
-        }
-        return hasAdd;
-    }
-
 
     /**
      * 计算商品价格
