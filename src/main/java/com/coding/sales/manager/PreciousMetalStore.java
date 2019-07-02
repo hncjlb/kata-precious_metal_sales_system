@@ -34,7 +34,7 @@ public class PreciousMetalStore {
         preciousMetal2.setPrice(1380.00f);
         preciousMetal2.setUnit("盒");
         List<String> discoutCoupons2 = new ArrayList<String>(1);
-        discoutCoupons2.add("9折打折券");
+        discoutCoupons2.add("9折券");
         preciousMetal2.setDiscountCoupons(discoutCoupons2);
         preciousMetalList.add(preciousMetal2);
 
@@ -44,7 +44,7 @@ public class PreciousMetalStore {
         preciousMetal3.setPrice(1580.00f);
         preciousMetal3.setUnit("条");
         List<String> discoutCoupons3 = new ArrayList<String>(1);
-        discoutCoupons3.add("95折打折券");
+        discoutCoupons3.add("95折券");
         preciousMetal3.setDiscountCoupons(discoutCoupons3);
         preciousMetalList.add(preciousMetal3);
 
@@ -80,7 +80,7 @@ public class PreciousMetalStore {
         promotions6.add("满3送1");
         preciousMetal6.setPromotions(promotions6);
         List<String> discoutCoupons6 = new ArrayList<String>(1);
-        discoutCoupons6.add("95折打折券");
+        discoutCoupons6.add("95折券");
         preciousMetal6.setDiscountCoupons(discoutCoupons6);
         preciousMetalList.add(preciousMetal6);
 
@@ -95,7 +95,7 @@ public class PreciousMetalStore {
         promotions7.add("每满1000减10");
         preciousMetal7.setPromotions(promotions7);
         List<String> discoutCoupons7 = new ArrayList<String>(1);
-        discoutCoupons7.add("9折打折券");
+        discoutCoupons7.add("9折券");
         preciousMetal7.setDiscountCoupons(discoutCoupons7);
         preciousMetalList.add(preciousMetal7);
     }
