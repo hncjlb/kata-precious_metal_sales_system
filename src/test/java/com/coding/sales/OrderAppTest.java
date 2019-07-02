@@ -11,10 +11,7 @@ import org.junit.runners.Parameterized;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -62,9 +59,9 @@ public class OrderAppTest {
         OrderItemCommand orderItemCommand = new OrderItemCommand("001001", new BigDecimal(1));
         orderItemCommandList.add(orderItemCommand);
         PreciousMetalStore mPreciousMetalStore = PreciousMetalStore.getInstance();
-        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
+        Map<String, PreciousMetal> preciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
 
-        app.computePrice(orderRepresentation,preciousMetalList, orderItemCommandList);
+        app.computePrice(orderRepresentation,preciousMetalMap, orderItemCommandList);
 
         assertEquals(new BigDecimal(998.00), orderRepresentation.getTotalPrice());
     }

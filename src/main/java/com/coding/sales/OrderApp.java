@@ -10,12 +10,14 @@ import com.coding.sales.output.OrderRepresentation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 销售系统的主入口
  * 用于打印销售凭证
  */
 public class OrderApp {
+
     private PreciousMetalStore mPreciousMetalStore;
 
     public static void main(String[] args) {
@@ -42,14 +44,60 @@ public class OrderApp {
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = null;
         mPreciousMetalStore = PreciousMetalStore.getInstance();
-        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
+//<<<<<<<Updated upstream
+//        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
+//        OrderRepresentation orderRepresentation = new OrderRepresentation();
+//        //TODO 获取商品列表
+//        List<OrderItemCommand> orderItemList = command.getItems();
+//        computePrice(orderRepresentation, preciousMetalList, orderItemList);
+
+//=======
+        Map<String, PreciousMetal> mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
         OrderRepresentation orderRepresentation = new OrderRepresentation();
         //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
-        computePrice(orderRepresentation, preciousMetalList, orderItemList);
-
+        List<String> discounts = command.getDiscounts();
+        computePrice(orderRepresentation, mPreciousMetalMap, orderItemList);
+        computeDisCountedPrice(orderRepresentation, orderItemList, mPreciousMetalMap, discounts);
+//>>>>>>>Stashed changes
 
         return result;
+    }
+
+    /**
+     * 计算商品折扣
+     *
+     * @param orderRepresentation
+     * @param orderItemList
+     * @param mPreciousMetalMap
+     * @param discounts
+     * @return
+     */
+    private float computeDisCountedPrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList, Map<String, PreciousMetal> mPreciousMetalMap, List<String> discounts) {
+        if (orderRepresentation == null || orderItemList.size() <= 0 || discounts.size() <= 0) {
+            return 0.00f;
+        }
+        //遍历会员购买清单
+        for (OrderItemCommand orderItem : orderItemList) {
+            //从在售清单获取商品信息
+            PreciousMetal preciousMetal = mPreciousMetalMap.get(orderItem.getProduct());
+            if (null == preciousMetal) {
+                continue;
+            }
+            //获取商品可使用的打折卡
+            List<String> discountCoupons = preciousMetal.getDiscountCoupons();
+            //遍历用户上送的打折卡类型
+            for (String discount : discounts) {
+                //该商品是否支持用户手中的打折卡
+                if (discountCoupons.contains(discount)){
+                    
+                }
+                //计算该商品打折后的金额
+
+
+            }
+        }
+        return 0;
     }
 
     /**
@@ -57,7 +105,7 @@ public class OrderApp {
      *
      * @param orderItemList
      */
-    public void computePrice(OrderRepresentation orderRepresentation, List<PreciousMetal> preciousMetalList, List<OrderItemCommand> orderItemList) {
+    public void computePrice(OrderRepresentation orderRepresentation, Map<String,PreciousMetal> preciousMetalMap, List<OrderItemCommand> orderItemList) {
         if (null == orderItemList || orderItemList.size() <= 0) {
             return;
         }
@@ -67,7 +115,7 @@ public class OrderApp {
             if (null == orderItem) {
                 continue;
             }
-            PreciousMetal preciousMetal = pickProductById(preciousMetalList, orderItem.getProduct());
+            PreciousMetal preciousMetal = pickProductById(preciousMetalMap, orderItem.getProduct());
             if (null == preciousMetal) {
                 continue;
             }
@@ -81,15 +129,10 @@ public class OrderApp {
         orderRepresentation.setTotalPrice(totalPrice);
     }
 
-    private PreciousMetal pickProductById(List<PreciousMetal> preciousMetalList, String productId) {
+    private PreciousMetal pickProductById( Map<String,PreciousMetal> preciousMetalMap, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
         }
-        for (PreciousMetal preciousMetal : preciousMetalList) {
-            if (preciousMetal.getId().equals(productId)) {
-                return preciousMetal;
-            }
-        }
-        return null;
+        return preciousMetalMap.get(productId);
     }
 }

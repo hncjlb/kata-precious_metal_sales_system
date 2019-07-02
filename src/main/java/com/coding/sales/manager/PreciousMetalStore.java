@@ -3,10 +3,13 @@ package com.coding.sales.manager;
 import com.coding.sales.model.PreciousMetal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PreciousMetalStore {
-    private List<PreciousMetal> preciousMetalList = new ArrayList<PreciousMetal>();
+    //private List<PreciousMetal> preciousMetalList = new ArrayList<PreciousMetal>();
+    private Map<String,PreciousMetal> preciousMetalMap = new HashMap<String, PreciousMetal>();
     private static PreciousMetalStore sInstance = new PreciousMetalStore();
 
     private PreciousMetalStore(){
@@ -28,7 +31,8 @@ public class PreciousMetalStore {
         preciousMetal1.setId("001001");
         preciousMetal1.setPrice(998.00f);
         preciousMetal1.setUnit("册");
-        preciousMetalList.add(preciousMetal1);
+//        preciousMetalList.add(preciousMetal1);
+        preciousMetalMap.put(preciousMetal1.getId(),preciousMetal1);
 
         PreciousMetal preciousMetal2 = new PreciousMetal();
         preciousMetal2.setId("001002");
@@ -38,7 +42,8 @@ public class PreciousMetalStore {
         List<String> discoutCoupons2 = new ArrayList<String>(1);
         discoutCoupons2.add("9折券");
         preciousMetal2.setDiscountCoupons(discoutCoupons2);
-        preciousMetalList.add(preciousMetal2);
+//        preciousMetalList.add(preciousMetal2);
+        preciousMetalMap.put(preciousMetal2.getId(),preciousMetal2);
 
         PreciousMetal preciousMetal3 = new PreciousMetal();
         preciousMetal3.setId("003001");
@@ -48,7 +53,8 @@ public class PreciousMetalStore {
         List<String> discoutCoupons3 = new ArrayList<String>(1);
         discoutCoupons3.add("95折券");
         preciousMetal3.setDiscountCoupons(discoutCoupons3);
-        preciousMetalList.add(preciousMetal3);
+//        preciousMetalList.add(preciousMetal3);
+        preciousMetalMap.put(preciousMetal3.getId(),preciousMetal3);
 
         PreciousMetal preciousMetal4 = new PreciousMetal();
         preciousMetal4.setId("003002");
@@ -59,7 +65,8 @@ public class PreciousMetalStore {
         promotions4.add("第3件半价");
         promotions4.add("满3送1");
         preciousMetal4.setPromotions(promotions4);
-        preciousMetalList.add(preciousMetal4);
+//        preciousMetalList.add(preciousMetal4);
+        preciousMetalMap.put(preciousMetal4.getId(),preciousMetal4);
 
         PreciousMetal preciousMetal5 = new PreciousMetal();
         preciousMetal5.setId("002002");
@@ -70,7 +77,8 @@ public class PreciousMetalStore {
         promotions5.add("每满2000减30");
         promotions5.add("每满1000减10");
         preciousMetal5.setPromotions(promotions5);
-        preciousMetalList.add(preciousMetal5);
+//        preciousMetalList.add(preciousMetal5);
+        preciousMetalMap.put(preciousMetal5.getId(),preciousMetal5);
 
         PreciousMetal preciousMetal6 = new PreciousMetal();
         preciousMetal6.setId("002001");
@@ -84,7 +92,8 @@ public class PreciousMetalStore {
         List<String> discoutCoupons6 = new ArrayList<String>(1);
         discoutCoupons6.add("95折券");
         preciousMetal6.setDiscountCoupons(discoutCoupons6);
-        preciousMetalList.add(preciousMetal6);
+//        preciousMetalList.add(preciousMetal6);
+        preciousMetalMap.put(preciousMetal6.getId(),preciousMetal6);
 
         PreciousMetal preciousMetal7 = new PreciousMetal();
         preciousMetal7.setId("002003");
@@ -99,10 +108,15 @@ public class PreciousMetalStore {
         List<String> discoutCoupons7 = new ArrayList<String>(1);
         discoutCoupons7.add("9折券");
         preciousMetal7.setDiscountCoupons(discoutCoupons7);
-        preciousMetalList.add(preciousMetal7);
+//        preciousMetalList.add(preciousMetal7);
+        preciousMetalMap.put(preciousMetal7.getId(),preciousMetal7);
     }
 
-    public List<PreciousMetal> getPreciousMetalList(){
-        return preciousMetalList;
+    public Map<String,PreciousMetal> getPreciousMetalMap(){
+        return preciousMetalMap;
     }
+
+//    public List<PreciousMetal> getPreciousMetalList(){
+//        return preciousMetalList;
+//    }
 }
