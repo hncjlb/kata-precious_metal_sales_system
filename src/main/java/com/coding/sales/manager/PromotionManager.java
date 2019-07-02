@@ -45,7 +45,9 @@ public class PromotionManager {
             System.out.println("maxPromotion:"+maxPromotion);
             compareAndDiscount(result, orderItem, maxPromotion);
             for(String key : promotionResult.keySet()) {
-                result.getDiscountCards().add(key);
+                if(!result.getDiscountCards().contains(key)) {
+                    result.getDiscountCards().add(key);
+                }
             }
         }
     }
