@@ -249,4 +249,8 @@ public class OrderRepresentation {
     public void setDiscountCards(List<String> discountCards) {
         this.discountCards = discountCards;
     }
+
+    public BigDecimal getTotalPrice(){
+        return totalPrice;
+    }
 }

@@ -1,5 +1,7 @@
 package com.coding.sales.model;
 
+import com.coding.sales.output.OrderItemRepresentation;
+
 import java.util.List;
 
 /**
@@ -79,4 +81,5 @@ public class PreciousMetal {
     public void setPromotions(List<String> promotions) {
         this.promotions = promotions;
     }
+
 }

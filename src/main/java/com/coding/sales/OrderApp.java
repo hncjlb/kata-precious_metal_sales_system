@@ -4,8 +4,10 @@ import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.manager.PreciousMetalStore;
 import com.coding.sales.model.PreciousMetal;
+import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,6 @@ import java.util.List;
  */
 public class OrderApp {
     private PreciousMetalStore mPreciousMetalStore;
-    private List<PreciousMetal> mPreciousMetalList;
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -41,11 +42,11 @@ public class OrderApp {
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = null;
         mPreciousMetalStore = PreciousMetalStore.getInstance();
-        mPreciousMetalList = mPreciousMetalStore.getPreciousMetalList();
+        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
         OrderRepresentation orderRepresentation = new OrderRepresentation();
         //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
-        float originPrice = computePrice(orderRepresentation, orderItemList);
+        computePrice(orderRepresentation, preciousMetalList, orderItemList);
 
 
         return result;
@@ -56,26 +57,35 @@ public class OrderApp {
      *
      * @param orderItemList
      */
-    public float computePrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList) {
+    public void computePrice(OrderRepresentation orderRepresentation, List<PreciousMetal> preciousMetalList, List<OrderItemCommand> orderItemList) {
         if (null == orderItemList || orderItemList.size() <= 0) {
-            return 0.00f;
+            return;
         }
-        float price = 0.00f;
+        BigDecimal totalPrice = new BigDecimal(0);
+        List<OrderItemRepresentation> orderItemRepresentations = new ArrayList<OrderItemRepresentation>();
         for (OrderItemCommand orderItem : orderItemList) {
             if (null == orderItem) {
                 continue;
             }
-            PreciousMetal preciousMetal = pickProductById(orderItem.getProduct());
-            preciousMetal.getPrice();
+            PreciousMetal preciousMetal = pickProductById(preciousMetalList, orderItem.getProduct());
+            if (null == preciousMetal) {
+                continue;
+            }
+            BigDecimal subTotal = new BigDecimal(preciousMetal.getPrice());
+            subTotal = subTotal.multiply(orderItem.getAmount());
+            OrderItemRepresentation orderItemRepresentation = new OrderItemRepresentation(preciousMetal.getId(), preciousMetal.getName(), new BigDecimal(preciousMetal.getPrice()), orderItem.getAmount(), subTotal);
+            orderItemRepresentations.add(orderItemRepresentation);
+            totalPrice = totalPrice.add(subTotal);
         }
-        return 0.00f;
+        orderRepresentation.setItems(orderItemRepresentations);
+        orderRepresentation.setTotalPrice(totalPrice);
     }
 
-    private PreciousMetal pickProductById(String productId) {
+    private PreciousMetal pickProductById(List<PreciousMetal> preciousMetalList, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
         }
-        for (PreciousMetal preciousMetal : mPreciousMetalList) {
+        for (PreciousMetal preciousMetal : preciousMetalList) {
             if (preciousMetal.getId().equals(productId)) {
                 return preciousMetal;
             }

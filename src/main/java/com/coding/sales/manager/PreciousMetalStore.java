@@ -10,10 +10,12 @@ public class PreciousMetalStore {
     private static PreciousMetalStore sInstance = new PreciousMetalStore();
 
     private PreciousMetalStore(){
+        System.out.println("PreciousMetalStore");
         initPreciousMetal();
     }
 
     public synchronized static PreciousMetalStore getInstance() {
+        System.out.println("getInstance");
         return sInstance;
     }
 
