@@ -2,6 +2,7 @@ package com.coding.sales;
 
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.manager.PreciousMetalStore;
+import com.coding.sales.model.DiscountManager;
 import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(Parameterized.class)
 public class OrderAppTest {
@@ -58,11 +60,41 @@ public class OrderAppTest {
         List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
         OrderItemCommand orderItemCommand = new OrderItemCommand("001001", new BigDecimal(1));
         orderItemCommandList.add(orderItemCommand);
-        PreciousMetalStore mPreciousMetalStore = PreciousMetalStore.getInstance();
-        Map<String, PreciousMetal> preciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
 
-        app.computePrice(orderRepresentation,preciousMetalMap, orderItemCommandList);
+        app.computePrice(orderRepresentation, orderItemCommandList);
 
         assertEquals(new BigDecimal(998.00), orderRepresentation.getTotalPrice());
+    }
+
+    @Test
+    public void should_discount_is_null_when_buy_one_product_001001_has_discount_9() {
+        OrderApp app = new OrderApp();
+        OrderRepresentation orderRepresentation = new OrderRepresentation();
+        List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
+        OrderItemCommand orderItemCommand = new OrderItemCommand("001001", new BigDecimal(1));
+        orderItemCommandList.add(orderItemCommand);
+        List<String> discounts = new ArrayList<String>();
+        discounts.add(DiscountManager.DISCOUNT_9);
+        app.computePrice(orderRepresentation, orderItemCommandList);
+
+        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
+
+        assertNull(orderRepresentation.getDiscounts());
+    }
+
+    @Test
+    public void should_discount_is_1242_when_buy_one_product_001002_has_discount_9() {
+        OrderApp app = new OrderApp();
+        OrderRepresentation orderRepresentation = new OrderRepresentation();
+        List<OrderItemCommand> orderItemCommandList = new ArrayList<OrderItemCommand>();
+        OrderItemCommand orderItemCommand = new OrderItemCommand("001002", new BigDecimal(1));
+        orderItemCommandList.add(orderItemCommand);
+        List<String> discounts = new ArrayList<String>();
+        discounts.add(DiscountManager.DISCOUNT_9);
+        app.computePrice(orderRepresentation, orderItemCommandList);
+
+        app.computeDisCountedPrice(orderRepresentation, orderItemCommandList, discounts);
+
+        assertEquals(new BigDecimal(1242.00), orderRepresentation.getTotalDiscountPrice());
     }
 }

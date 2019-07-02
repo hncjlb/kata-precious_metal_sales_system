@@ -253,4 +253,16 @@ public class OrderRepresentation {
     public BigDecimal getTotalPrice(){
         return totalPrice;
     }
+
+    public List<OrderItemRepresentation> getOrderItems() {
+        return items;
+    }
+
+    public List<DiscountItemRepresentation> getDiscounts() {
+        return discounts;
+    }
+
+    public BigDecimal getTotalDiscountPrice() {
+        return totalDiscountPrice;
+    }
 }
