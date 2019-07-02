@@ -50,4 +50,16 @@ public class DiscountItemRepresentation {
         result = 31 * result + discount.hashCode();
         return result;
     }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
 }

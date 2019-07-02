@@ -1,4 +1,4 @@
-package com.coding.sales.model;
+package com.coding.sales.manager;
 
 public class DiscountManager {
     public static final String DISCOUNT_9 = "9折券";

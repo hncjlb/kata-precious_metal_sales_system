@@ -10,13 +10,16 @@ import java.util.Map;
 public class PreciousMetalStore {
 
     private Map<String,PreciousMetal> preciousMetalMap = new HashMap<String, PreciousMetal>();
-    private static PreciousMetalStore sInstance = new PreciousMetalStore();
+    private static PreciousMetalStore sInstance;
 
     private PreciousMetalStore(){
         initPreciousMetal();
     }
 
     public synchronized static PreciousMetalStore getInstance() {
+        if(null == sInstance){
+            sInstance = new PreciousMetalStore();
+        }
         return sInstance;
     }
 

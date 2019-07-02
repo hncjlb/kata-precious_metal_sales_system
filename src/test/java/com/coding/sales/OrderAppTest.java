@@ -1,10 +1,7 @@
 package com.coding.sales;
 
 import com.coding.sales.input.OrderItemCommand;
-import com.coding.sales.manager.PreciousMetalStore;
-import com.coding.sales.model.DiscountManager;
-import com.coding.sales.model.PreciousMetal;
-import com.coding.sales.output.OrderItemRepresentation;
+import com.coding.sales.manager.DiscountManager;
 import com.coding.sales.output.OrderRepresentation;
 import org.junit.Test;
 import org.junit.runner.RunWith;

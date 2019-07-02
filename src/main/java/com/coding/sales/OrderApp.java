@@ -4,7 +4,8 @@ import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.manager.MemberMsg;
 import com.coding.sales.manager.PreciousMetalStore;
-import com.coding.sales.model.DiscountManager;
+import com.coding.sales.manager.DiscountManager;
+import com.coding.sales.manager.PromotionManager;
 import com.coding.sales.model.Member;
 import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.DiscountItemRepresentation;
@@ -64,8 +65,26 @@ public class OrderApp {
 
         computePrice(result, orderItemList);
         computeDisCountedPrice(result, orderItemList, discounts);
+
+        PromotionManager.computePromotions(result);
+
+        computeTotalDiscount(result);
         return result;
     }
+
+    public void computeTotalDiscount(OrderRepresentation order) {
+        if (null == order || null == order.getDiscounts() || order.getDiscounts().size() <= 0) {
+            return;
+        }
+
+        List<DiscountItemRepresentation> discounts = order.getDiscounts();
+        BigDecimal totalDiscount = new BigDecimal(0);
+        for (DiscountItemRepresentation discount : discounts) {
+            totalDiscount = totalDiscount.add(discount.getDiscount());
+        }
+        order.setTotalDiscountPrice(totalDiscount);
+    }
+
 
     /**
      * 获取订单会员信息
@@ -130,7 +149,11 @@ public class OrderApp {
                         System.out.println("subtotal:" + orderItem.getSubTotal() + "; rate:" + discountRate);
                         BigDecimal subDiscount = orderItem.getSubTotal().multiply(new BigDecimal(discountRate));
                         DiscountItemRepresentation discountItem = new DiscountItemRepresentation(orderItem.getProductNo(), orderItem.getProductName(), subDiscount);
-                        discountItemRepresentations.add(discountItem);
+                        boolean hasAdd = compareExistDiscount(discountItemRepresentations, discountItem);
+                        if (!hasAdd) {
+                            discountItemRepresentations.add(discountItem);
+                        }
+
                         totalDiscount = totalDiscount.add(subDiscount);
                     }
                 }
@@ -138,6 +161,18 @@ public class OrderApp {
         }
         orderRepresentation.setDiscounts(discountItemRepresentations);
         orderRepresentation.setTotalDiscountPrice(totalDiscount);
+    }
+
+    private boolean compareExistDiscount(List<DiscountItemRepresentation> discountItemRepresentations, DiscountItemRepresentation discountItem) {
+        boolean hasAdd = false;
+        for (DiscountItemRepresentation existDiscount : discountItemRepresentations) {
+            if (existDiscount.getProductNo().equals(discountItem.getProductNo()) && existDiscount.getDiscount().floatValue() < discountItem.getDiscount().floatValue()) {
+                existDiscount.setDiscount(discountItem.getDiscount());
+                hasAdd = true;
+                break;
+            }
+        }
+        return hasAdd;
     }
 
 
