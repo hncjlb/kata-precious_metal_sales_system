@@ -42,6 +42,7 @@ public class DiscountManagerTest {
         app.computePrice(orderRepresentation, orderItemCommandList);
 
         DiscountManager.computeDiscountedPrice(orderRepresentation, orderItemCommandList, discounts);
+        app.computeTotalDiscount(orderRepresentation);
 
         assertEquals(new BigDecimal(1242.00), orderRepresentation.getTotalDiscountPrice());
     }
