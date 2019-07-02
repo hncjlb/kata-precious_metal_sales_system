@@ -1,13 +1,20 @@
 package com.coding.sales;
 
 import com.coding.sales.input.OrderCommand;
+import com.coding.sales.input.OrderItemCommand;
+import com.coding.sales.manager.PreciousMetalStore;
+import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.OrderRepresentation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 销售系统的主入口
  * 用于打印销售凭证
  */
 public class OrderApp {
+    private PreciousMetalStore mPreciousMetalStore;
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -32,9 +39,25 @@ public class OrderApp {
 
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = null;
+        mPreciousMetalStore = PreciousMetalStore.getInstance();
+        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
 
-        //TODO: 请完成需求指定的功能
+        //TODO 获取商品列表
+        List<OrderItemCommand> orderItemList = command.getItems();
+        float originPrice = computePrice(orderItemList);
+
 
         return result;
+    }
+
+    /**
+     * TODO 计算商品价格
+     * @param orderItemList
+     */
+    public float computePrice(List<OrderItemCommand> orderItemList) {
+        if(null == orderItemList || orderItemList.size()<= 0){
+            return 0.00f;
+        }
+        return 0.00f;
     }
 }
