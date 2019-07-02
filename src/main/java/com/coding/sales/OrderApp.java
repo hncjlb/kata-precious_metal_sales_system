@@ -56,9 +56,6 @@ public class OrderApp {
         mPreciousMetalStore = PreciousMetalStore.getInstance();
 
         Map<String, Member> mMemberMap = MemberMsg.getInstance().getMemberMsg();
-        Map<String, PreciousMetal> mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
-        OrderRepresentation orderRepresentation = new OrderRepresentation();
-        //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
         computePrice(result, orderItemList);
@@ -116,7 +113,7 @@ public class OrderApp {
 
 
     /**
-     * TODO 计算商品价格
+     * 计算商品价格
      *
      * @param orderItemList
      */
