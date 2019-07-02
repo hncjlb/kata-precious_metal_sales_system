@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class OrderApp {
     private PreciousMetalStore mPreciousMetalStore;
+    private List<PreciousMetal> mPreciousMetalList;
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -33,18 +34,18 @@ public class OrderApp {
     public String checkout(String orderCommand) {
         OrderCommand command = OrderCommand.from(orderCommand);
         OrderRepresentation result = checkout(command);
-        
+
         return result.toString();
     }
 
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = null;
         mPreciousMetalStore = PreciousMetalStore.getInstance();
-        List<PreciousMetal> preciousMetalList = mPreciousMetalStore.getPreciousMetalList();
-
+        mPreciousMetalList = mPreciousMetalStore.getPreciousMetalList();
+        OrderRepresentation orderRepresentation = new OrderRepresentation();
         //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
-        float originPrice = computePrice(orderItemList);
+        float originPrice = computePrice(orderRepresentation, orderItemList);
 
 
         return result;
@@ -52,12 +53,33 @@ public class OrderApp {
 
     /**
      * TODO 计算商品价格
+     *
      * @param orderItemList
      */
-    public float computePrice(List<OrderItemCommand> orderItemList) {
-        if(null == orderItemList || orderItemList.size()<= 0){
+    public float computePrice(OrderRepresentation orderRepresentation, List<OrderItemCommand> orderItemList) {
+        if (null == orderItemList || orderItemList.size() <= 0) {
             return 0.00f;
         }
+        float price = 0.00f;
+        for (OrderItemCommand orderItem : orderItemList) {
+            if (null == orderItem) {
+                continue;
+            }
+            PreciousMetal preciousMetal = pickProductById(orderItem.getProduct());
+            preciousMetal.getPrice();
+        }
         return 0.00f;
+    }
+
+    private PreciousMetal pickProductById(String productId) {
+        if (null == productId || productId.isEmpty()) {
+            return null;
+        }
+        for (PreciousMetal preciousMetal : mPreciousMetalList) {
+            if (preciousMetal.getId().equals(productId)) {
+                return preciousMetal;
+            }
+        }
+        return null;
     }
 }

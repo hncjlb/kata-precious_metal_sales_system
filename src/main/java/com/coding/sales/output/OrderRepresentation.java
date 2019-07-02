@@ -29,6 +29,9 @@ public class OrderRepresentation {
     private List<String> discountCards;
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("0.00");
 
+    public OrderRepresentation() {
+    }
+
     /**
      * @param orderId               订单号
      * @param createTime            订单创建时间
@@ -185,5 +188,65 @@ public class OrderRepresentation {
         }
 
         return result.toString();
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setMemberNo(String memberNo) {
+        this.memberNo = memberNo;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public void setOldMemberType(String oldMemberType) {
+        this.oldMemberType = oldMemberType;
+    }
+
+    public void setNewMemberType(String newMemberType) {
+        this.newMemberType = newMemberType;
+    }
+
+    public void setMemberPointsIncreased(int memberPointsIncreased) {
+        this.memberPointsIncreased = memberPointsIncreased;
+    }
+
+    public void setMemberPoints(int memberPoints) {
+        this.memberPoints = memberPoints;
+    }
+
+    public void setItems(List<OrderItemRepresentation> items) {
+        this.items = items;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setDiscounts(List<DiscountItemRepresentation> discounts) {
+        this.discounts = discounts;
+    }
+
+    public void setTotalDiscountPrice(BigDecimal totalDiscountPrice) {
+        this.totalDiscountPrice = totalDiscountPrice;
+    }
+
+    public void setReceivables(BigDecimal receivables) {
+        this.receivables = receivables;
+    }
+
+    public void setPayments(List<PaymentRepresentation> payments) {
+        this.payments = payments;
+    }
+
+    public void setDiscountCards(List<String> discountCards) {
+        this.discountCards = discountCards;
     }
 }
