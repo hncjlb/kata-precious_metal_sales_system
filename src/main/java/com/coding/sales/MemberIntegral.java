@@ -23,9 +23,6 @@ public class MemberIntegral {
         int cumulativeIntegral = getOrderCumulativeIntegral(member, increaseIntegral);
         orderRepresentation.setMemberPointsIncreased(increaseIntegral);
         orderRepresentation.setMemberPoints(cumulativeIntegral);
-        //计算用户登陆
-        MemberLevel memberLevel = new MemberLevel();
-        memberLevel.computeMemberLevel(orderRepresentation, Integer.valueOf(member.getIntegral()), cumulativeIntegral);
     }
 
     /**

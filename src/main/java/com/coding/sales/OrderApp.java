@@ -57,25 +57,29 @@ public class OrderApp {
 
     public OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = new OrderRepresentation();
-
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
-
         Member member = getOrderMemberMsg(mMemberMap, command.getMemberId());
+
         initCurrentOrderMemberMsg(result, member, command);
         computePrice(result, orderItemList);
+
         DiscountManager.computeDiscountedPrice(result, orderItemList, discounts);
-
         PromotionManager.computePromotions(result);
-
         computeTotalDiscount(result);
-        computeDeal(result);
+        computeReceivables(result);
+
         computeMemberIntegral(result, member);
         computeMemberLevel(result, member);
         return result;
     }
 
-    private void computeDeal(OrderRepresentation result) {
+    /**
+     * 计算支付金额
+     *
+     * @param result
+     */
+    private void computeReceivables(OrderRepresentation result) {
         result.setReceivables(result.getTotalPrice().subtract(result.getTotalDiscountPrice()));
     }
 
@@ -105,7 +109,7 @@ public class OrderApp {
     }
 
     /**
-     * 初始化当前订单
+     * 初始化当前订单会员信息
      *
      * @param member
      */
@@ -168,6 +172,11 @@ public class OrderApp {
                 orderRepresentation.getMemberPoints());
     }
 
+    /**
+     * @param preciousMetalMap
+     * @param productId
+     * @return
+     */
     private PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
