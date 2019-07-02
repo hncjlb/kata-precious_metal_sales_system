@@ -60,11 +60,24 @@ public class OrderApp {
         //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
+
+        Member member = getOrderMemberMsg(mMemberMap, command.getMemberId());
         computePrice(orderRepresentation, mPreciousMetalMap, orderItemList);
         computeDisCountedPrice(orderRepresentation, orderItemList, mPreciousMetalMap, discounts);
 //>>>>>>>Stashed changes
 
         return result;
+    }
+
+    /**
+     * 获取订单会员信息
+     *
+     * @param mMemberMap
+     * @param memberId
+     * @return
+     */
+    private Member getOrderMemberMsg(Map<String, Member> mMemberMap, String memberId) {
+        return mMemberMap.get(memberId);
     }
 
     /**
@@ -138,4 +151,68 @@ public class OrderApp {
         }
         return preciousMetalMap.get(productId);
     }
+
+    /**
+     * 计算用户积分
+     *
+     * @param orderRepresentation
+     * @param member
+     * @param orderPayMoney
+     */
+    public void computeMemberIntegral(OrderRepresentation orderRepresentation, Member member, String orderPayMoney) {
+        String memberIntegralBenchmark = getMemberIntegralBenchmark(member);
+        BigDecimal payMoneyBig = new BigDecimal(orderPayMoney);
+        BigDecimal benchmarkBig = new BigDecimal(memberIntegralBenchmark);
+        BigDecimal increaseIntegralBig = payMoneyBig.multiply(benchmarkBig);
+        int increaseIntegral = increaseIntegralBig.setScale(0, BigDecimal.ROUND_DOWN).intValue();
+        orderRepresentation.setMemberPointsIncreased(increaseIntegral);
+        int cumulativeIntegral = new BigDecimal(member.getIntegral()).add(new BigDecimal(increaseIntegral)).intValue();
+        orderRepresentation.setMemberPoints(cumulativeIntegral);
+
+        String oldLevel = getMemberLevelFromIntegral(Integer.valueOf(member.getIntegral()));
+        String newLevel = getMemberLevelFromIntegral(cumulativeIntegral);
+        if (!oldLevel.equals(newLevel)) {
+            orderRepresentation.setNewMemberType(newLevel);
+        }
+    }
+
+    /**
+     * 获取用户等级通过积分
+     *
+     * @param integral
+     * @return
+     */
+    public String getMemberLevelFromIntegral(int integral) {
+        if (integral < 10000) {
+            return "普卡";
+        } else if (integral < 50000) {
+            return "金卡";
+        } else if (integral < 100000) {
+            return "白金卡";
+        } else {
+            return "钻石卡";
+        }
+    }
+
+
+    /**
+     * 获取会员积分等级准则
+     *
+     * @param member
+     */
+    public String getMemberIntegralBenchmark(Member member) {
+        String level = member.getLevel();
+        if (level.equals("普卡")) {
+            return "1";
+        } else if (level.equals("金卡")) {
+            return "1.5";
+        } else if (level.equals("白金卡")) {
+            return "1.8";
+        } else if (level.equals("钻石卡")) {
+            return "2";
+        }
+        return "1";
+    }
+
+
 }
