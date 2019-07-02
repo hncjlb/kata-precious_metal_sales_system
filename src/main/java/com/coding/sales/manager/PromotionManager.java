@@ -8,10 +8,18 @@ import com.coding.sales.output.OrderRepresentation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PromotionManager {
+    private static final String type1 = "每满3000元减350";
+    private static final String type2 = "每满2000元减30";
+    private static final String type3 = "每满1000元减10";
+    private static final String type4 = "第3件半价";
+    private static final String type5 = "满3送1";
+
+
     private static Map<String, PreciousMetal> sPreciousMetalMap;
 
     public static void computePromotions(OrderRepresentation result) {
@@ -32,9 +40,13 @@ public class PromotionManager {
                 return;
             }
             List<String> promotions = preciousMetal.getPromotions();
-            float maxPromotion = computeMaxPromotion(promotions, orderItem);
+            Map<String,Float> promotionResult = computeMaxPromotion(promotions, orderItem);
+            float maxPromotion = promotionResult.get(0);
             System.out.println("maxPromotion:"+maxPromotion);
             compareAndDiscount(result, orderItem, maxPromotion);
+            for(String key : promotionResult.keySet()) {
+                result.getDiscountCards().add(key);
+            }
         }
     }
 
@@ -44,7 +56,6 @@ public class PromotionManager {
             List<DiscountItemRepresentation> discounts = result.getDiscounts();
             for (DiscountItemRepresentation discount : discounts) {
                 if (discount.getProductNo().equals(orderItem.getProductNo()) && maxPromotion > discount.getDiscount().floatValue()) {
-                    BigDecimal tmp = new BigDecimal(maxPromotion).subtract(discount.getDiscount());
                     discount.setDiscount(new BigDecimal(maxPromotion));
                     hasAdd = true;
                     break;
@@ -54,7 +65,6 @@ public class PromotionManager {
                 result.getDiscounts().add(new DiscountItemRepresentation(orderItem.getProductNo(), orderItem.getProductName(), new BigDecimal(maxPromotion)));
             }
         } else {
-            System.out.println("222222222");
             List<DiscountItemRepresentation> discounts = new ArrayList<DiscountItemRepresentation>();
             DiscountItemRepresentation discount = new DiscountItemRepresentation(orderItem.getProductNo(), orderItem.getProductName(), new BigDecimal(maxPromotion));
             discounts.add(discount);
@@ -62,23 +72,31 @@ public class PromotionManager {
         }
     }
 
-    private static float computeMaxPromotion(List<String> promotions, OrderItemRepresentation orderItem) {
+    private static Map<String,Float> computeMaxPromotion(List<String> promotions, OrderItemRepresentation orderItem) {
         float maxPromotion = 0.0f;
+        String maxPromotionStr = null;
         for (String promotion : promotions) {
-            if ("每满3000元减350".equals(promotion) && orderItem.getSubTotal().floatValue() >= 3000 && maxPromotion < 350) {
+            if (type1.equals(promotion) && orderItem.getSubTotal().floatValue() >= 3000 && maxPromotion < 350) {
                 maxPromotion = 350;
-            } else if ("每满2000元减30".equals(promotion) && orderItem.getSubTotal().floatValue() >= 2000 && maxPromotion < 30) {
+                maxPromotionStr = type1;
+            } else if (type2.equals(promotion) && orderItem.getSubTotal().floatValue() >= 2000 && maxPromotion < 30) {
                 maxPromotion = 30;
-            } else if ("每满1000元减10".equals(promotion) && orderItem.getSubTotal().floatValue() >= 1000 && maxPromotion < 10) {
+                maxPromotionStr = type2;
+            } else if (type3.equals(promotion) && orderItem.getSubTotal().floatValue() >= 1000 && maxPromotion < 10) {
                 maxPromotion = 10;
-            } else if ("第3件半价".equals(promotion) && orderItem.getAmount().intValue() >= 3 && maxPromotion < orderItem.getPrice().divide(new BigDecimal(0.5)).floatValue()) {
+                maxPromotionStr = type3;
+            } else if (type4.equals(promotion) && orderItem.getAmount().intValue() >= 3 && maxPromotion < orderItem.getPrice().divide(new BigDecimal(0.5)).floatValue()) {
                 maxPromotion = orderItem.getPrice().multiply(new BigDecimal(0.5)).floatValue();
+                maxPromotionStr = type4;
                 System.out.println("第三件半件"+maxPromotion);
             } else if ("满3送1".equals(promotion) && orderItem.getAmount().intValue() >= 4 && maxPromotion < orderItem.getPrice().floatValue()) {
                 maxPromotion = orderItem.getPrice().floatValue();
+                maxPromotionStr = type5;
                 System.out.println("满3送1"+maxPromotion);
             }
         }
-        return maxPromotion;
+        Map<String,Float>  result = new HashMap<String, Float>();
+        result.put(maxPromotionStr,maxPromotion);
+        return result;
     }
 }

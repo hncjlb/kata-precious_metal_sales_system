@@ -27,7 +27,6 @@ public class DiscountManager {
         }
     }
 
-
     /**
      * 计算商品折扣
      *
@@ -41,9 +40,10 @@ public class DiscountManager {
             return;
         }
         sPreciousMetalMap = PreciousMetalStore.getInstance().getPreciousMetalMap();
-        BigDecimal totalDiscount = new BigDecimal(0);
         //遍历打折卡
         List<DiscountItemRepresentation> discountItemRepresentations = new ArrayList<DiscountItemRepresentation>();
+
+        List<String> usedDiscountCards = new ArrayList();
         for (String discount : discounts) {
             //遍历会员购买清单
             System.out.println("orderItems.size:" + orderRepresentation.getOrderItems().size());
@@ -71,13 +71,14 @@ public class DiscountManager {
                             discountItemRepresentations.add(discountItem);
                         }
 
-                        totalDiscount = totalDiscount.add(subDiscount);
+                        usedDiscountCards.add(usableDiscount);
                     }
                 }
             }
         }
+
+        orderRepresentation.setDiscountCards(usedDiscountCards);
         orderRepresentation.setDiscounts(discountItemRepresentations);
-        orderRepresentation.setTotalDiscountPrice(totalDiscount);
     }
 
     private static boolean compareExistDiscount(List<DiscountItemRepresentation> discountItemRepresentations, DiscountItemRepresentation discountItem) {

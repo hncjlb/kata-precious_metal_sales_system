@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -27,6 +28,8 @@ public class OrderRepresentation {
     private BigDecimal receivables;
     private List<PaymentRepresentation> payments;
     private List<String> discountCards;
+    private Map<String, List<String>> discountProducts;
+
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("0.00");
 
     public OrderRepresentation() {
@@ -249,11 +252,11 @@ public class OrderRepresentation {
         this.discountCards = discountCards;
     }
 
-    public BigDecimal getReceivables(){
+    public BigDecimal getReceivables() {
         return receivables;
     }
 
-    public BigDecimal getTotalPrice(){
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
@@ -271,5 +274,17 @@ public class OrderRepresentation {
 
     public int getMemberPoints() {
         return memberPoints;
+    }
+
+    public Map<String, List<String>> getDiscountProducts() {
+        return discountProducts;
+    }
+
+    public void setDiscountProducts(Map<String, List<String>> discountProducts) {
+        this.discountProducts = discountProducts;
+    }
+
+    public List<String> getDiscountCards() {
+        return discountCards;
     }
 }
