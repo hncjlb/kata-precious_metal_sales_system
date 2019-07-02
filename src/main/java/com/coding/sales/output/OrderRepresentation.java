@@ -252,19 +252,11 @@ public class OrderRepresentation {
         this.discountCards = discountCards;
     }
 
-<<<<<<< Updated upstream
-    public BigDecimal getReceivables() {
-        return receivables;
-    }
-
-    public BigDecimal getTotalPrice() {
-=======
     public BigDecimal getReceivables(){
         return receivables;
     }
 
     public BigDecimal getTotalPrice(){
->>>>>>> Stashed changes
         return totalPrice;
     }
 
@@ -296,3 +288,4 @@ public class OrderRepresentation {
         return discountCards;
     }
 }
+

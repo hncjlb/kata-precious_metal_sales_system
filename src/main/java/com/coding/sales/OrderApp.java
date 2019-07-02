@@ -69,14 +69,10 @@ public class OrderApp {
         DiscountManager.computeDiscountedPrice(result, orderItemList, discounts);
         PromotionManager.computePromotions(result);
         computeTotalDiscount(result);
-<<<<<<< Updated upstream
         computeReceivables(result);
 
         computeMemberIntegral(result, member);
         computeMemberLevel(result, member);
-=======
-        computeMemberIntegralAndLevel();
->>>>>>> Stashed changes
         return result;
     }
 
@@ -175,7 +171,6 @@ public class OrderApp {
     }
 
     /**
-<<<<<<< Updated upstream
      * 计算用户积分
      */
     private void computeMemberIntegral(OrderRepresentation orderRepresentation, Member member) {
@@ -195,21 +190,6 @@ public class OrderApp {
                 orderRepresentation.getMemberPoints());
     }
 
-    /**
-     * @param preciousMetalMap
-     * @param productId
-     * @return
-     */
-=======
-     * 计算用户积分和等级
-     */
-    private void computeMemberIntegralAndLevel(OrderRepresentation orderRepresentation,Member member) {
-        MemberIntegral memberIntegral = new MemberIntegral();
-
-//        memberIntegral.computeMemberIntegral(orderRepresentation,member,orderRepresentation.get);
-    }
-
->>>>>>> Stashed changes
     private PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
