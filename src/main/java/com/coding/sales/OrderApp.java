@@ -2,8 +2,10 @@ package com.coding.sales;
 
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
+import com.coding.sales.manager.MemberMsg;
 import com.coding.sales.manager.PreciousMetalStore;
 import com.coding.sales.model.DiscountManager;
+import com.coding.sales.model.Member;
 import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.DiscountItemRepresentation;
 import com.coding.sales.output.OrderItemRepresentation;
@@ -51,6 +53,12 @@ public class OrderApp {
 
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = new OrderRepresentation();
+        mPreciousMetalStore = PreciousMetalStore.getInstance();
+
+        Map<String, Member> mMemberMap = MemberMsg.getInstance().getMemberMsg();
+        Map<String, PreciousMetal> mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
+        OrderRepresentation orderRepresentation = new OrderRepresentation();
+        //TODO 获取商品列表
         List<OrderItemCommand> orderItemList = command.getItems();
         List<String> discounts = command.getDiscounts();
         computePrice(result, orderItemList);
