@@ -2,7 +2,9 @@ package com.coding.sales;
 
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
+import com.coding.sales.manager.MemberMsg;
 import com.coding.sales.manager.PreciousMetalStore;
+import com.coding.sales.model.Member;
 import com.coding.sales.model.PreciousMetal;
 import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
@@ -52,6 +54,7 @@ public class OrderApp {
 //        computePrice(orderRepresentation, preciousMetalList, orderItemList);
 
 //=======
+        Map<String, Member> mMemberMap = MemberMsg.getInstance().getMemberMsg();
         Map<String, PreciousMetal> mPreciousMetalMap = mPreciousMetalStore.getPreciousMetalMap();
         OrderRepresentation orderRepresentation = new OrderRepresentation();
         //TODO 获取商品列表
@@ -89,8 +92,8 @@ public class OrderApp {
             //遍历用户上送的打折卡类型
             for (String discount : discounts) {
                 //该商品是否支持用户手中的打折卡
-                if (discountCoupons.contains(discount)){
-                    
+                if (discountCoupons.contains(discount)) {
+
                 }
                 //计算该商品打折后的金额
 
@@ -105,7 +108,7 @@ public class OrderApp {
      *
      * @param orderItemList
      */
-    public void computePrice(OrderRepresentation orderRepresentation, Map<String,PreciousMetal> preciousMetalMap, List<OrderItemCommand> orderItemList) {
+    public void computePrice(OrderRepresentation orderRepresentation, Map<String, PreciousMetal> preciousMetalMap, List<OrderItemCommand> orderItemList) {
         if (null == orderItemList || orderItemList.size() <= 0) {
             return;
         }
@@ -129,7 +132,7 @@ public class OrderApp {
         orderRepresentation.setTotalPrice(totalPrice);
     }
 
-    private PreciousMetal pickProductById( Map<String,PreciousMetal> preciousMetalMap, String productId) {
+    private PreciousMetal pickProductById(Map<String, PreciousMetal> preciousMetalMap, String productId) {
         if (null == productId || productId.isEmpty()) {
             return null;
         }
