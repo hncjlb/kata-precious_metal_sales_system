@@ -34,7 +34,7 @@ public class PromotionManager {
             PreciousMetal preciousMetal = sPreciousMetalMap.get(orderItem.getProductNo());
             if (null == preciousMetal.getPromotions() || preciousMetal.getPromotions().size() <= 0) {
                 System.out.println("getPromotions:"+preciousMetal.getPromotions());
-                return;
+                continue;
             }
             List<String> promotions = preciousMetal.getPromotions();
             System.out.println(promotions.size());
@@ -42,9 +42,8 @@ public class PromotionManager {
             for(String key : promotionResult.keySet()) {
                 float maxPromotion = promotionResult.get(key);
                 System.out.println("maxPromotion:"+maxPromotion);
-                compareAndDiscount(result, orderItem, maxPromotion);
-                if(!result.getDiscountCards().contains(key)) {
-                    result.getDiscountCards().add(key);
+                if(maxPromotion>0) {
+                    compareAndDiscount(result, orderItem, maxPromotion);
                 }
             }
         }
