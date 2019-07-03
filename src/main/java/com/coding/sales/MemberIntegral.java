@@ -49,7 +49,7 @@ public class MemberIntegral {
         String memberIntegralBenchmark = getMemberIntegralBenchmark(member);
         BigDecimal benchmarkBig = new BigDecimal(memberIntegralBenchmark);
         BigDecimal increaseIntegralBig = receivables.multiply(benchmarkBig);
-        return increaseIntegralBig.setScale(0, BigDecimal.ROUND_DOWN).intValue();
+        return increaseIntegralBig.setScale(0, BigDecimal.ROUND_UP).intValue();
     }
 
     /**
